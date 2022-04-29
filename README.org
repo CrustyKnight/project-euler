@@ -1,0 +1,30 @@
+#+TITLE: Project Euler Solutions
+
+* Problem 1
+The definition on [[https://projecteuler.net/][Project Euler]]:
+#+BEGIN_QUOTE
+If we list all the natural numbers below 10 that are multiples of 3 or 5, we get
+3, 5, 6, and 9. The sum of these multiples is 23.
+
+Find the sum of all the multiples of 3 or 5 below 1000.
+#+END_QUOTE
+
+** Solution
+So, to get all multiples of 3 under 1000, I can get a list of 1 to =(math.floor (/ 1000 3))=, then do =(map(list, (lambda (x) (* x 3)])))= and
+I can do the same for multiples of 5.
+
+However, I do not want to calculate the numbers that are both multiples of 5 and 3 twice and then have to remove duplicates, so I can do five first (because it has less numbers) and then do the three, but not do it if ~(= (mod x 5) 0)~.
+
+#+BEGIN_SRC fennel
+;; Range iterator
+(local fun (require :fun))
+
+(local multiples)
+(each [_it x (fun.range (- (/ 1000 5) 1))] (table.insert multiples (* 5 x)))
+(each [_it x (fun.range (math.floor (/ 1000 3)))] (if (not (=
+                                                            (math.mod (* 3 x) 5)
+                                                            0))
+                                                      (table.insert multiples (* 3 x))))
+
+
+#+END_SRC
